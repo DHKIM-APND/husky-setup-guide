@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-function changed {
+changed() {
     git diff --name-only HEAD@{1} HEAD | grep "^$1" >/dev/null 2>&1
 }
 
@@ -8,13 +8,13 @@ BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-echo -e "${BLUE}🔍 pnpm-lock.yml 변경사항 확인 중...${NC}"
+printf "${BLUE}🔍 pnpm-lock.yml 변경사항 확인 중...${NC}\n"
 
 if changed "pnpm-lock.yml"; then
-    echo -e "${GREEN}📦 pnpm-lock.yml이 변경되었습니다. 의존성을 최신 상태로 업데이트합니다.${NC}"
+    printf "${GREEN}📦 pnpm-lock.yml이 변경되었습니다. 의존성을 최신 상태로 업데이트합니다.${NC}\n"
     pnpm install
 fi
 
-echo -e "${GREEN}🎉 모든 업데이트가 완료되었습니다 :)${NC}"
+printf "${GREEN}🎉 모든 업데이트가 완료되었습니다 :)${NC}\n"
 
 exit 0
