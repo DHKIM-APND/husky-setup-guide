@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/common.sh"
+
+echo "===\n>> 브랜치명 검사 중..."
+
+# 브랜치 보호 기능이 활성화되어 있는지 확인
+if [[ -z $SKIP_BRANCH_PROTECTION ]]; then
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    PROTECTED_BRANCHES="^(main|master|develop)"
+
+    if [[ $BRANCH =~ $PROTECTED_BRANCHES ]]; then
+        echo ">> 🚫 $BRANCH 브랜치에 직접 커밋할 수 없습니다. 기능(feature) 브랜치를 생성 후 변경사항 반영 PR 요청해주세요."
+        exit 1
+    fi
+else
+    echo ">> 브랜치 보호 기능을 건너뜁니다."
+fi
+
+echo ">> 브랜치명 검사 완료"
+echo ">> 파일 린팅 및 자동 수정 중..."
+
+# pnpm type-check
+pnpm lint-staged
