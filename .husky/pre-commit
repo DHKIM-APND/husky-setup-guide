@@ -1,23 +1,27 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/common.sh"
 
-echo "===\n>> 브랜치명 검사 중..."
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # 색 초기화
 
-# 브랜치 보호 기능이 활성화되어 있는지 확인
+echo -e "${BLUE}===\n>> 브랜치명 검사 중...${NC}"
+
 if [[ -z $SKIP_BRANCH_PROTECTION ]]; then
     BRANCH=$(git rev-parse --abbrev-ref HEAD)
     PROTECTED_BRANCHES="^(main|master|develop)"
 
     if [[ $BRANCH =~ $PROTECTED_BRANCHES ]]; then
-        echo ">> 🚫 $BRANCH 브랜치에 직접 커밋할 수 없습니다. 기능(feature) 브랜치를 생성 후 변경사항 반영 PR 요청해주세요."
+        echo -e "${RED}🚫 직접 ${BRANCH} 브랜치에 커밋할 수 없습니다.\n👉 기능(feature) 브랜치를 생성 후 변경사항을 PR로 요청해주세요.${NC}"
         exit 1
     fi
 else
-    echo ">> 브랜치 보호 기능을 건너뜁니다."
+    echo -e "${YELLOW}⚠️  브랜치 보호 기능을 건너뜁니다.${NC}"
 fi
 
-echo ">> 브랜치명 검사 완료"
-echo ">> 파일 린팅 및 자동 수정 중..."
+echo -e "${GREEN}✅ 브랜치명 검사 완료${NC}"
+echo -e "${YELLOW}🔧 파일 린팅 및 자동 수정 중...${NC}"
 
-# pnpm type-check
 pnpm lint-staged

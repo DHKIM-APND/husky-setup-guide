@@ -4,15 +4,17 @@ function changed {
     git diff --name-only HEAD@{1} HEAD | grep "^$1" >/dev/null 2>&1
 }
 
-echo 'pnpm-lock.yml 변경사항 확인 중...'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo -e "${BLUE}🔍 pnpm-lock.yml 변경사항 확인 중...${NC}"
 
 if changed "pnpm-lock.yml"; then
-    echo "📦 pnpm-lock.yml이 변경되었습니다. 의존성을 최신 상태로 업데이트합니다."
+    echo -e "${GREEN}📦 pnpm-lock.yml이 변경되었습니다. 의존성을 최신 상태로 업데이트합니다.${NC}"
     pnpm install
 fi
 
-echo '모든 업데이트가 완료되었습니다 :)'
-
-
+echo -e "${GREEN}🎉 모든 업데이트가 완료되었습니다 :)${NC}"
 
 exit 0
